@@ -6,8 +6,8 @@ import scalafx.scene.image.ImageView
 import scalafx.scene.image.Image
 
 /**
-This is a stub for the graphical game.
-*/
+ * This is a stub for the graphical game.
+ */
 object Main extends JFXApp {
 	stage = new JFXApp.PrimaryStage {
 		title = "My Game" // Change this to match the theme of your game.
