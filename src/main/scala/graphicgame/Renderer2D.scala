@@ -7,22 +7,19 @@ import scalafx.scene.image.Image
  * This is a 2D renderer that with draw your game elements to a Canvas. You should change the
  * images to fit the style of your game. Also, alter the entities to match what you have in
  * your game.
- * 
- * Unlike the Maze class, you will do quite a bit of editing this file to change images and alter
- * other details. You will have to uncomment the render method to use this.
  */
 class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private var lastCenterX = 0.0
   private var lastCenterY = 0.0
 
-  // Put variables for images here. Put your images in the src/main/resources directory.
-  private val floorImage = Renderer2D.loadImage("/images/floor.png")
-  private val wallImage = Renderer2D.loadImage("/images/wall.png")
-  private val playerImage = Renderer2D.loadImage("/images/player.png")
-  private val enemyImage = Renderer2D.loadImage("/images/enemy.png")
-  private val generatorImage = Renderer2D.loadImage("/images/generator.png")
-  private val bulletImage = Renderer2D.loadImage("/images/bullet.png")
-  
+  // Put variables for images here
+  private val floorImage = new Image("file:images/floor.png")
+  private val wallImage = new Image("file:images/wall.png")
+  private val playerImage = new Image("file:images/player.png")
+  private val enemyImage = new Image("file:images/enemy.png")
+  private val generatorImage = new Image("file:images/generator.png")
+  private val bulletImage = new Image("file:images/bullet.png")
+
   /**
    * These two methods are used to figure out where to draw things. They are used by the render.
    */
@@ -50,10 +47,9 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
 //      x <- cx.toInt - drawWidth / 2 - 1 to cx.toInt + drawWidth / 2 + 1
 //      y <- cy.toInt - drawHeight / 2 - 1 to cy.toInt + drawHeight / 2 + 1
 //    } {
-//      val img = if (level.maze(x, y)) {
-//        wallImage
-//      } else {
-//        floorImage
+//      val img = level.maze(x, y) match {
+//        case Wall => wallImage
+//        case Floor => floorImage
 //      }
 //      gc.drawImage(img, blocksToPixelsX(x), blocksToPixelsY(y), blockSize, blockSize)
 //    }
@@ -64,6 +60,7 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
 //        case p: Player => playerImage
 //        case e: Enemy => enemyImage
 //        case b: Bullet => bulletImage
+//        case g: Generator => generatorImage
 //      }
 //      if(level.maze.wrap) {
 //        for(rx <- -1 to 1; ry <- -1 to 1)
@@ -73,21 +70,5 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
 //      }
 //    }
 //  }
-}
 
-object Renderer2D {
-  /**
-   * This method assumes that you are putting your images in src/main/resources. This directory is
-   * packaged into the JAR file. Eclipse doesn't use the JAR file, so this will go to the file in
-   * the directory structure if it can't find the resource in the classpath. The argument should be the
-   * path inside of the resources directory.
-   */
-  def loadImage(path: String): Image = {
-    val res = getClass.getResource(path)
-    if(res == null) {
-      new Image("file:src/main/resources"+path)
-    } else {
-      new Image(res.toExternalForm())
-    }
-  }  
 }
