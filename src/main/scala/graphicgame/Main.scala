@@ -16,3 +16,6 @@ object Main extends JFXApp {
 		}
 	}
 }
+
+
+//key pressed events make sure to import scalafx.something._
