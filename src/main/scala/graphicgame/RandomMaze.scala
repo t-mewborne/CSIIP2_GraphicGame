@@ -26,7 +26,7 @@ class RandomMaze private(val cellSize: Int, val wrap: Boolean, wallsInput: Array
     if (wrap) {
       walls((r + walls.length) % walls.length)((c + walls(0).length) % walls(0).length)
     } else {
-      if (r < 0 || r >= walls.length || c < 0 || c >= walls(0).length) 2 else walls(r)(c)
+      if (r < 0 || r Entity>= walls.length || c < 0 || c >= walls(0).length) 2 else walls(r)(c)
     }
   }
   

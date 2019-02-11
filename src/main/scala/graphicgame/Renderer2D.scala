@@ -59,21 +59,49 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
       gc.drawImage(img, blocksToPixelsX(x), blocksToPixelsY(y), blockSize, blockSize)
     }
 
+    
+    for(be <- room.player :: room.elements; cell <- be.cells) {
+      cell.color = Color.Red
+      cell match {
+        case _: Enemy =>
+          gc.fillOval(blockSize,blockSize,blockSize,blockSize)
+        case _: Player =>
+          gc.fillRect(blockSize, blockSize, blockSize, blockSize)
+      }
+    
     // Draw entities
-    for (e <- level.entities) {
-      val img = e match {
-        case p: Player => playerImage
-        case e: Enemy => enemyImage
-        case b: Bullet => bulletImage
-        case g: Generator => generatorImage
-      }
-      if(level.maze.wrap) {
-        for(rx <- -1 to 1; ry <- -1 to 1)
-    	    gc.drawImage(img, blocksToPixelsX(e.x-e.width/2+rx*level.maze.width), blocksToPixelsY(e.y-e.height/2+ry*level.maze.height), e.width*blockSize, e.height*blockSize)
-      } else {
-    	  gc.drawImage(img, blocksToPixelsX(e.x-e.width/2), blocksToPixelsY(e.y-e.height/2), e.width*blockSize, e.height*blockSize)
-      }
+//    for (e <- level.entities) {
+//      val img = e match {
+//        case p: Player => gc.fillRect(cellSize,cellSize,cellSize,cellSize) //playerImage
+//        case e: Enemy => gc.fillRect(cellSize,cellSize,cellSize,cellSize) //enemyImage
+//        //case b: Bullet => bulletImage
+//        //case g: Generator => generatorImage
+//      }
+//      if(level.maze.wrap) {
+//        for(rx <- -1 to 1; ry <- -1 to 1)
+//    	    gc.drawImage(img, blocksToPixelsX(e.x-e.width/2+rx*level.maze.width), blocksToPixelsY(e.y-e.height/2+ry*level.maze.height), e.width*blockSize, e.height*blockSize)
+//      } else {
+//    	  gc.drawImage(img, blocksToPixelsX(e.x-e.width/2), blocksToPixelsY(e.y-e.height/2), e.width*blockSize, e.height*blockSize)
+//      }
     }
   }
 
+}
+
+object Renderer2D {
+  val cellSize = 50
+  /**
+   * This method assumes that you are putting your images in src/main/resources. This directory is
+   * packaged into the JAR file. Eclipse doesn't use the JAR file, so this will go to the file in
+   * the directory structure if it can't find the resource in the classpath. The argument should be the
+   * path inside of the resources directory.
+   */
+//  def loadImage(path: String): Image = {
+//    val res = getClass.getResource(path)
+//    if(res == null) {
+//      new Image("file:src/main/resources"+path)
+//    } else {
+//      new Image(res.toExternalForm())
+//    }
+//  }  
 }

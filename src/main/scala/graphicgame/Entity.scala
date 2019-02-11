@@ -1,13 +1,20 @@
 package graphicgame
 
 trait Entity extends Serializable {
-  def name: String // Only used for 3D renderer, otherwise remove.
+
+  private val moveInterval = 0.1
+  private var moveDelay = 0.0
+  
   def x: Double
   def y: Double
   def width: Double
   def height: Double
   
-  def update(delay: Double): Unit
+  def update(delay: Double): Unit = {
+    moveDelay += delay
+    if (moveDelay >= moveInterval) moveDelay = 0.0
+  }
+  
   def postCheck(): Unit // You can delete this if you don't use it.
   def stillHere(): Boolean // This is how you should remove entites from the level.
 }
