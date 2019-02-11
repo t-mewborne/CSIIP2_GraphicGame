@@ -21,7 +21,7 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private val enemyImage = new Image("file:images/enemy.png")
   private val generatorImage = new Image("file:images/generator.png")
   private val bulletImage = new Image("file:images/bullet.png")
-
+  
   /**
    * These two methods are used to figure out where to draw things. They are used by the render.
    */
@@ -40,9 +40,6 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   def render(level: Level, cx: Double, cy: Double): Unit = {
     lastCenterX = cx
     lastCenterY = cy
-
-    gc.fill = Color.Black
-    gc.fillRect(0, 0, Main.boardWidth, Main.boardHeight)
     
     val drawWidth = (gc.canvas.getWidth / blockSize).toInt + 1
     val drawHeight = (gc.canvas.getWidth / blockSize).toInt + 1
@@ -59,37 +56,25 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
       gc.drawImage(img, blocksToPixelsX(x), blocksToPixelsY(y), blockSize, blockSize)
     }
 
-    
-    for(be <- room.player :: room.elements; cell <- be.cells) {
-      cell.color = Color.Red
-      cell match {
-        case _: Enemy =>
-          gc.fillOval(blockSize,blockSize,blockSize,blockSize)
-        case _: Player =>
-          gc.fillRect(blockSize, blockSize, blockSize, blockSize)
+     //Draw entities
+    for (e <- level.entities) {
+      val img = e match {
+        case p: Player => playerImage
+        case e: Enemy => enemyImage
+        //case b: Bullet => bulletImage
+        //case g: Generator => generatorImage
       }
-    
-    // Draw entities
-//    for (e <- level.entities) {
-//      val img = e match {
-//        case p: Player => gc.fillRect(cellSize,cellSize,cellSize,cellSize) //playerImage
-//        case e: Enemy => gc.fillRect(cellSize,cellSize,cellSize,cellSize) //enemyImage
-//        //case b: Bullet => bulletImage
-//        //case g: Generator => generatorImage
-//      }
-//      if(level.maze.wrap) {
-//        for(rx <- -1 to 1; ry <- -1 to 1)
-//    	    gc.drawImage(img, blocksToPixelsX(e.x-e.width/2+rx*level.maze.width), blocksToPixelsY(e.y-e.height/2+ry*level.maze.height), e.width*blockSize, e.height*blockSize)
-//      } else {
-//    	  gc.drawImage(img, blocksToPixelsX(e.x-e.width/2), blocksToPixelsY(e.y-e.height/2), e.width*blockSize, e.height*blockSize)
-//      }
+      if(level.maze.wrap) {
+        for(rx <- -1 to 1; ry <- -1 to 1)
+    	    gc.drawImage(img, blocksToPixelsX(e.x-e.width/2+rx*level.maze.width), blocksToPixelsY(e.y-e.height/2+ry*level.maze.height), e.width*blockSize, e.height*blockSize)
+      } else {
+    	  gc.drawImage(img, blocksToPixelsX(e.x-e.width/2), blocksToPixelsY(e.y-e.height/2), e.width*blockSize, e.height*blockSize)
+      }
     }
   }
-
 }
 
 object Renderer2D {
-  val cellSize = 50
   /**
    * This method assumes that you are putting your images in src/main/resources. This directory is
    * packaged into the JAR file. Eclipse doesn't use the JAR file, so this will go to the file in

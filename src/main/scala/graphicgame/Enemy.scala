@@ -1,14 +1,13 @@
 package graphicgame
 
 class Enemy(
-  private var _x: Double,
+ private var _x: Double,
   private var _y: Double,
-  val level: Level,
-  private var dead: Boolean,
-  private var dir: Int) extends Entity {
-
-  private var _width = 10.0
-  private var _height = 10.0
+  private var _width: Int,
+  private var _height: Int,
+  maze: Maze) extends Entity {
+  
+  private var dead = false
   private val moveInterval = 0.1
   private var moveDelay = 0.0
   private var movingUp = false

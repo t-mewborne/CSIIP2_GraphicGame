@@ -16,7 +16,7 @@ class RandomMaze private(val cellSize: Int, val wrap: Boolean, wallsInput: Array
    * Tells you the width of the maze in cells.
    */
   def width = walls(0).length * cellSize
-  
+
   /**
    * Tells you the height of the maze in cells.
    */
@@ -26,10 +26,10 @@ class RandomMaze private(val cellSize: Int, val wrap: Boolean, wallsInput: Array
     if (wrap) {
       walls((r + walls.length) % walls.length)((c + walls(0).length) % walls(0).length)
     } else {
-      if (r < 0 || r Entity>= walls.length || c < 0 || c >= walls(0).length) 2 else walls(r)(c)
+      if (r < 0 || r >= walls.length || c < 0 || c >= walls(0).length) 2 else walls(r)(c)
     }
   }
-  
+
   /**
    * Tells you if there is a wall at a particular row and column location.
    * @param row The row to check.
@@ -38,7 +38,7 @@ class RandomMaze private(val cellSize: Int, val wrap: Boolean, wallsInput: Array
   def apply(row: Int, col: Int): CellType = {
     if(isOpen(row, col)) Floor else Wall
   }
-  
+
   private def isOpen(row: Int, col: Int): Boolean = { 
     import RandomMaze._
     val fracRow = (row + height) % cellSize
