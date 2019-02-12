@@ -12,8 +12,8 @@ class Player(
   private var movingLeft = false
   private var movingRight = false
   
-  private val moveInterval = 0.1
-  private var moveDelay = 0.0
+  private val moveInterval = 0.006
+  private var moveDelay = 0.003
 
 
 
@@ -28,13 +28,12 @@ class Player(
       if (movingUp) move(0,-1)
       if (movingDown) move(0,1)
       if (movingLeft) move(-1,0)
-      if (movingRight) move(0,1)
+      if (movingRight) move(1,0)
       moveDelay = 0.0
     }
   }
 
- // def postCheck(): Unit = ??? //What is this for
-
+ // def postCheck(): Unit = ???
   //def stillHere(): Boolean = ???
 
   def upPressed(): Unit = movingUp = true
@@ -51,7 +50,7 @@ class Player(
     if (maze.isClear(x+dx,y+dy,width,height,this)){
       _x+=dx
       _y+=dy
-  }
+    }
   }
 
 }

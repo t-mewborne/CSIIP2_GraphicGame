@@ -1,15 +1,11 @@
 package graphicgame
 
 trait Entity extends Serializable {
-
-  private val moveInterval = 0.1
-  private var moveDelay = 0.0
   
   def x: Double
   def y: Double
   def width: Double
   def height: Double
-  
   def update(delay: Double): Unit
   
   //def postCheck(): Unit // You can delete this if you don't use it.

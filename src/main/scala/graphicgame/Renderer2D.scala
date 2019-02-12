@@ -15,12 +15,12 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private var lastCenterY = 0.0
 
   // Put variables for images here
-  private val floorImage = new Image("file:images/floor.png")
-  private val wallImage = new Image("file:images/wall.png")
-  private val playerImage = new Image("file:images/player.png")
-  private val enemyImage = new Image("file:images/enemy.png")
-  private val generatorImage = new Image("file:images/generator.png")
-  private val bulletImage = new Image("file:images/bullet.png")
+  private val floorImage = new Image("images/floor.png")
+  private val wallImage = new Image("images/wall.png")
+  private val playerImage = new Image("images/player.png")
+  private val enemyImage = new Image("images/enemy.png")
+//  private val generatorImage = new Image("images/generator.png")
+//  private val bulletImage = new Image("images/bullet.png")
   
   /**
    * These two methods are used to figure out where to draw things. They are used by the render.
