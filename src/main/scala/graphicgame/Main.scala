@@ -15,7 +15,7 @@ object Main extends JFXApp {
   val boardWidth = 100 * 10
   val boardHeight = 80 * 10
   stage = new JFXApp.PrimaryStage {
-    title = "Pacman?" // TODO Change this to match the theme of your game.
+    title = "Pacman Survival" // TODO Change this to match the theme of your game.
     scene = new Scene(boardWidth, boardHeight) {
       // Put your code here.
       val canvas = new Canvas(boardWidth, boardHeight)
