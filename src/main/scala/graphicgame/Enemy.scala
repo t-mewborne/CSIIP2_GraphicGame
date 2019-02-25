@@ -14,11 +14,13 @@ class Enemy(
   private var movingDown = false
   private var movingLeft = false
   private var movingRight = true
+  private var _enemyType = util.Random.nextInt(4) + 1 //1, 2, 3, 4 Red, Orange, Blue, Pink
 
   def x(): Double = _x
   def y(): Double = _y
   def width(): Double = _width
   def height(): Double = _height
+  def enemyType(): Int = _enemyType
 
   def update(delay: Double): Unit = {
     moveDelay += delay

@@ -6,11 +6,10 @@ class Level (
   
   def entities():Seq[Entity] = _entities
   
-  def +=(e:Entity):Unit = ???
+  def +=(e:Entity):Unit = _entities +:= e
   
   def updateAll(delay:Double):Unit= {
-    _entities(0).update(delay)
-    _entities(1).update(delay)
+   _entities.foreach(_.update(delay))
   }
   
 }

@@ -15,12 +15,18 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private var lastCenterY = 0.0
 
   // Put variables for images here
-  private val floorImage = new Image("images/floor.png")
-  private val wallImage = new Image("images/wall.png")
-  private val playerImage = new Image("images/player.png")
-  private val enemyImage = new Image("images/enemy.png")
-//  private val generatorImage = new Image("images/generator.png")
-//  private val bulletImage = new Image("images/bullet.png")
+  private val floorImage = Renderer2D.loadImage("/images/floor.png")
+  private val wallImage = Renderer2D.loadImage("/images/wall.png")
+  private val playerImageLeft = Renderer2D.loadImage("/images/playerLeft.png")
+  private val playerImageRight = Renderer2D.loadImage("/images/playerRight.png")
+  private val playerImageUp = Renderer2D.loadImage("/images/playerUp.png")
+  private val playerImageDown = Renderer2D.loadImage("/images/playerDown.png")
+  private val enemyImageRed = Renderer2D.loadImage("/images/red.png")
+  private val enemyImageOrange = Renderer2D.loadImage("/images/orange.png")
+  private val enemyImageBlue = Renderer2D.loadImage("/images/blue.png")
+  private val enemyImagePink = Renderer2D.loadImage("/images/pink.png")
+//  private val generatorImage = Renderer2D.loadImage("/images/generator.png")
+  private val bulletImage = Renderer2D.loadImage("/images/projectile.png")
   
   /**
    * These two methods are used to figure out where to draw things. They are used by the render.
@@ -59,9 +65,20 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
      //Draw entities
     for (e <- level.entities) {
       val img = e match {
-        case p: Player => playerImage
-        case e: Enemy => enemyImage
-        //case b: Bullet => bulletImage
+        case p: Player => p.facing match {
+          case 1 => playerImageUp
+          case 2 => playerImageDown
+          case 3 => playerImageLeft
+          case 4 => playerImageRight
+          //TODO Add more images for 45, -45, etc
+        }
+        case e: Enemy => e.enemyType match {
+          case 1 => enemyImageRed
+          case 2 => enemyImageOrange
+          case 3 => enemyImageBlue
+          case 4 => enemyImagePink
+        }
+        case b: Projectile => bulletImage
         //case g: Generator => generatorImage
       }
       if(level.maze.wrap) {
@@ -81,12 +98,12 @@ object Renderer2D {
    * the directory structure if it can't find the resource in the classpath. The argument should be the
    * path inside of the resources directory.
    */
-//  def loadImage(path: String): Image = {
-//    val res = getClass.getResource(path)
-//    if(res == null) {
-//      new Image("file:src/main/resources"+path)
-//    } else {
-//      new Image(res.toExternalForm())
-//    }
-//  }  
+  def loadImage(path: String): Image = {
+    val res = getClass.getResource(path)
+    if(res == null) {
+      new Image("file:src/main/resources"+path)
+    } else {
+      new Image(res.toExternalForm())
+    }
+  }  
 }
