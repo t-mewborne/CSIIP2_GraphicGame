@@ -14,12 +14,14 @@ class Enemy(
   private var movingDown = false
   private var movingLeft = false
   private var movingRight = true
-  private var _enemyType = util.Random.nextInt(4) + 1 //1, 2, 3, 4 Red, Orange, Blue, Pink
+  private var _stillHere = true
+  private val _enemyType = util.Random.nextInt(4) + 1 //1, 2, 3, 4 Red, Orange, Blue, Pink
 
   def x(): Double = _x
   def y(): Double = _y
   def width(): Double = _width
   def height(): Double = _height
+  def stillHere(): Boolean = _stillHere
   def enemyType(): Int = _enemyType
 
   def update(delay: Double): Unit = {
@@ -35,12 +37,15 @@ class Enemy(
 
   def postCheck(): Unit = ??? //What is this for
 
-  def stillHere(): Boolean = ???
 
   def move(dx: Double, dy: Double): Unit = {
     if (maze.isClear(x + dx, y + dy, width, height, this)) {
       _x += dx
       _y += dy
+    }
+    
+    def shortestPath(){
+      
     }
   }
 }

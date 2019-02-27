@@ -7,15 +7,15 @@ class Player(
   private var _height: Int,
   maze: Maze) extends Entity {
 
+  private var _stillHere = true
   private var movingUp = false
   private var movingDown = false
   private var movingLeft = false
   private var movingRight = false
   private var mouseX = 0.0
   private var mouseY = 0.0
-  private var shooting = false
   
-  private var _facing = 4 //1, 2, 3, 4 = Up, Down, Left, Right
+  private var _facing = 0 //0-7 = Right, Right/Down, Down, Down/Left, Left, Left/Up, Up, Up/Right
   
   private val moveInterval = 0.006
   private var moveDelay = 0.003
@@ -26,7 +26,19 @@ class Player(
   def y(): Double = _y
   def width(): Double = _width
   def height(): Double = _height
-  def facing(): Int = _facing
+  def stillHere(): Boolean = _stillHere
+  
+  def facing(): Int = {
+    if (movingUp && movingRight) _facing = 7
+    else if (movingUp && movingLeft) _facing = 5
+    else if (movingDown && movingRight) _facing = 1
+    else if (movingDown && movingLeft) _facing = 3
+    else if (movingUp) _facing = 6
+    else if (movingDown) _facing = 2
+    else if (movingLeft) _facing = 4
+    else if (movingRight) _facing = 0
+    _facing
+  }
 
   def update(delay: Double): Unit = {
     moveDelay += delay
@@ -35,36 +47,23 @@ class Player(
       if (movingDown) move(0,1)
       if (movingLeft) move(-1,0)
       if (movingRight) move(1,0)
-      if (shooting) fire()
       moveDelay = 0.0
     }
   }
 
  // def postCheck(): Unit = ???
-  //def stillHere(): Boolean = ???
   
-  def mouseClick(mouseXPos:Double,mouseYPos:Double): Unit = {
-    shooting = true
+  def mouseClick(mouseXPos:Double,mouseYPos:Double,level:Level): Unit = {
     mouseX = mouseXPos
     mouseY = mouseYPos
+    val currentLevel=level
+    currentLevel += new Projectile(_x,_y,2,2,maze,mouseXPos,mouseYPos)
   }
 
-  def upPressed(): Unit = {
-    movingUp = true
-    _facing = 1
-  }
-  def downPressed(): Unit = {
-    movingDown = true
-    _facing = 2
-  }
-  def leftPressed(): Unit = {
-    movingLeft = true
-    _facing = 3
-  }
-  def rightPressed(): Unit = {
-    movingRight = true
-    _facing = 4
-  }
+  def upPressed(): Unit = movingUp = true
+  def downPressed(): Unit = movingDown = true
+  def leftPressed(): Unit = movingLeft = true
+  def rightPressed(): Unit = movingRight = true
   
   def upReleased(): Unit = movingUp = false
   def downReleased(): Unit = movingDown = false
@@ -77,12 +76,6 @@ class Player(
       _y+=dy
     }
   }
-  
-  def fire():Unit={
-    println("Mouse event at "+ mouseX+","+mouseY)
-    shooting = false
-  }
-
 }
 
 object Player {

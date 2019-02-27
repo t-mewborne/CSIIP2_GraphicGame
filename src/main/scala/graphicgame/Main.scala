@@ -28,12 +28,16 @@ object Main extends JFXApp {
       val maze = RandomMaze(20,false,mazeHeight,mazeWidth,0.7)
       val player = new Player(10+util.Random.nextInt(mazeWidth)*20,10+util.Random.nextInt(mazeHeight)*20,5,5,maze)
       val level = new Level(maze, Seq(player))
-      for (i <- 0 to 30) level += new Enemy(10+util.Random.nextInt(mazeWidth)*20,10+util.Random.nextInt(mazeHeight)*20,10,10,maze)
+      for (i <- 0 to 40) level += new Enemy(10+util.Random.nextInt(mazeWidth)*20,10+util.Random.nextInt(mazeHeight)*20,10,10,maze)
       content = canvas
       renderer.render(level, player.x,player.y)
 
       onMouseClicked = (e: MouseEvent) => {
-        player.mouseClick(e.getX,e.getY)
+        println("MOUSE X:"+renderer.pixelsToBlocksX(e.getX)+" MOUSE Y:" +renderer.pixelsToBlocksY(e.getY))
+        println("PLAYER X:"+player.x+" PLAYER Y:" +player.y)
+        player.mouseClick(renderer.pixelsToBlocksX(e.getX).toInt.toDouble,renderer.pixelsToBlocksY(e.getY).toInt.toDouble,level)
+        //level += new Projectile(player.x,player.y,2,2,maze,e.getX,e.getY)
+        
       }
       
       onKeyPressed = (ke: KeyEvent) => {
