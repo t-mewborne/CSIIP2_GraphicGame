@@ -12,13 +12,13 @@ class Projectile(
   private var _stillHere = true
 
   private var timeAlive = 0.0
-  private val moveInterval = 0.003
+  private val moveInterval = 0.003 //TODO Needs to be slightly faster then the player
   private var moveDelay = 0.0
 
   if (newY == _y) newY+=1 //Prevents projectiles from creating undefined lines (causes projectile to show up for a short time then disappear)
   
-  private var m = (_y - newY) / (_x - newX)
-  private var b = newY - m * newX
+  private var m = (_y - newY) / (_x - newX) //Slope of the projectile
+  private var b = newY - m * newX //Y intercept of the projectile
 
   private var dx = 1.0
   private var dy = 1.0

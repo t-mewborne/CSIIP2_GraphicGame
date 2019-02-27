@@ -22,7 +22,6 @@ class Level (
       if (!_entities(i).stillHere()) _entities = _entities.filter(_ != _entities(i)) 
       i+=1 
     }
-   //_entities.filter(_.update(delay)) //remove dead entities
    _entities.foreach(_.update(delay))
   } 
 }

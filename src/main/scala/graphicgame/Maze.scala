@@ -37,7 +37,7 @@ trait Maze extends Serializable {
   def height: Int
 
   /**
-   * Tells you if there is a wall at a particular row and column location.
+   * Tells you if there is a wall at a particular row and column location. Returns either Floor or Wall
    * @param row The row to check.
    * @param col The column to check.
    */

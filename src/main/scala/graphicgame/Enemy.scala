@@ -7,7 +7,8 @@ class Enemy(
   private var _y:      Double,
   private var _width:  Int,
   private var _height: Int,
-  maze:                Maze) extends Entity {
+  maze:                Maze,
+  player: Player) extends Entity {
 
   private var dead = false
   private val moveInterval = 0.03
@@ -17,8 +18,8 @@ class Enemy(
   private var movingLeft = false
   private var movingRight = true
   private var _stillHere = true
-  private val _enemyType = util.Random.nextInt(4) + 1 //1, 2, 3, 4 Red, Orange, Blue, Pink
-  private var wallTest = new Array[Array[Int]](maze.height)
+  private val _enemyType = util.Random.nextInt(4) + 1 //1, 2, 3, 4 Red, Orange, Blue, Pink TODO Change enemy image if player captured/enemy killed, takes 2 shots to kill enemy?
+  private var wallTest = Array.ofDim[Int](maze.height,maze.width)
 
   def x(): Double = _x
   def y(): Double = _y
@@ -46,15 +47,15 @@ class Enemy(
       _y += dy
     }
   }
-
-//  for (r <- -5 until maze.height + 5) {
-//      for (c <- -5 until maze.width + 5) {
-//        if (maze(r, c) == Wall) print('#') else print(' ')
-//      }
-//      println()
-//    }
   
-  //println(shortestPath(0, 0, 9, 9, maze.getWallArray))
+  for (r <- 0 until maze.height){ //Create a map of the maze for the enemy to find the shortest path
+    for (c <- 0 until maze.width){
+      wallTest(r)(c) = if (maze.apply(r,c) == Floor) 0 else -1
+    }
+  }
+  //println("Is there a wall here: " + (if (maze.apply(_x.toInt,_y.toInt) == Floor) "no" else "yes"))
+  
+  //println(shortestPath(_x.toInt, _y.toInt, player.x.toInt, player.y.toInt, wallTest))
   val offsets = List((0, -1), (0, 1), (-1, 0), (1, 0))
   def shortestPath(sx: Int, sy: Int, ex: Int, ey: Int, maze: Array[Array[Int]]): Int = {
     val q = new ArrayQueue[(Int, Int, Int)]()
@@ -62,7 +63,7 @@ class Enemy(
     val visited = mutable.Set[(Int, Int)](sx -> sy)
     while (!q.isEmpty) {
       val (x, y, steps) = q.dequeue()
-      for ((dx, dy) <- offsets) {
+      for ((dx, dy) <- offsets) { //TODO this line is throwing an error when shortestPath is called
         val nx = x + dx
         val ny = y + dy
         if (nx == ex && ny == ey) return steps + 1
