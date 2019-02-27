@@ -12,6 +12,8 @@ class RandomMaze private(val cellSize: Int, val wrap: Boolean, wallsInput: Array
   require(wallsInput.length > 0 && wallsInput(0).length > 0, "Dimensions of maze must both be greater than 0.")
   private val walls = wallsInput.map(row => row.map(i => i).toArray).toArray
 
+  //def getWallArray = walls //Maybe use this for shortest path?
+  
   /**
    * Tells you the width of the maze in cells.
    */

@@ -33,11 +33,9 @@ object Main extends JFXApp {
       renderer.render(level, player.x,player.y)
 
       onMouseClicked = (e: MouseEvent) => {
-        println("MOUSE X:"+renderer.pixelsToBlocksX(e.getX)+" MOUSE Y:" +renderer.pixelsToBlocksY(e.getY))
-        println("PLAYER X:"+player.x+" PLAYER Y:" +player.y)
+//        println("MOUSE X:"+renderer.pixelsToBlocksX(e.getX)+" MOUSE Y:" +renderer.pixelsToBlocksY(e.getY))
+//        println("PLAYER X:"+player.x+" PLAYER Y:" +player.y)
         player.mouseClick(renderer.pixelsToBlocksX(e.getX).toInt.toDouble,renderer.pixelsToBlocksY(e.getY).toInt.toDouble,level)
-        //level += new Projectile(player.x,player.y,2,2,maze,e.getX,e.getY)
-        
       }
       
       onKeyPressed = (ke: KeyEvent) => {
