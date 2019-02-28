@@ -18,7 +18,7 @@ object Main extends JFXApp {
   val mazeWidth  = 30
   val mazeHeight = 30
   stage = new JFXApp.PrimaryStage {
-    title = "Pacman Survival" // TODO Change this to match the theme of your game.
+    title = "Pacman?" // TODO Change this to match the theme of your game.
     scene = new Scene(boardWidth, boardHeight) {
       // Put your code here.
       val canvas = new Canvas(boardWidth, boardHeight)
@@ -33,7 +33,7 @@ object Main extends JFXApp {
       renderer.render(level, player.x,player.y)
 
       onMouseClicked = (e: MouseEvent) => {
-//        println("MOUSE X:"+renderer.pixelsToBlocksX(e.getX)+" MOUSE Y:" +renderer.pixelsToBlocksY(e.getY))
+//        println("MOUSE X:"+renderer.pixelsToBlocksX(e.getX)+" MOUSE Y:" +renderer.pixelsToBlocksY(e.getYdddddddddd))
 //        println("PLAYER X:"+player.x+" PLAYER Y:" +player.y)
         player.mouseClick(renderer.pixelsToBlocksX(e.getX).toInt.toDouble,renderer.pixelsToBlocksY(e.getY).toInt.toDouble,level)
       }
