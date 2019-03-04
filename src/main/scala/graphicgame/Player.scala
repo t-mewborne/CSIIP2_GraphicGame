@@ -28,6 +28,10 @@ class Player(
   def height(): Double = _height
   def stillHere(): Boolean = _stillHere
   
+  def kill(): Unit = {
+    _stillHere = false
+  }
+  
   def facing(): Int = {
     if (movingUp && movingRight) _facing = 7
     else if (movingUp && movingLeft) _facing = 5
@@ -56,8 +60,7 @@ class Player(
   def mouseClick(mouseXPos:Double,mouseYPos:Double,level:Level): Unit = {
     mouseX = mouseXPos
     mouseY = mouseYPos
-    val currentLevel=level
-    currentLevel += new Projectile(_x,_y,2,2,maze,mouseXPos,mouseYPos)
+    level += new Projectile(_x,_y,2,2,maze,mouseXPos,mouseYPos)
   }
 
   def upPressed(): Unit = movingUp = true
