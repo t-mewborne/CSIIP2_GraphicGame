@@ -36,7 +36,17 @@ class Enemy(
   def update(delay: Double): Unit = {
     moveDelay += delay
     if (moveDelay >= moveInterval) {
-      if ((player.y-_y)/(player.x-_x) <= 1800) {
+      findPlayer()
+      if (Entity.intersect(this, player)) player.kill()
+      moveDelay = 0.0
+    }
+  }
+
+  //def postCheck(): Unit = ??? //TODO What is this for?
+  
+  def findPlayer(): Unit = {
+        if (((player.y-_y)/(player.x-_x)).abs <= 0.3) {
+        println(((player.y-_y)/(player.x-_x)).abs + "<= 0.3")
         val up = shortestPath(_x, _y - 1, player.x, player.y)
         val down = shortestPath(_x, _y + 1, player.x, player.y)
         val left = shortestPath(_x - 1, _y, player.x, player.y)
@@ -45,18 +55,7 @@ class Enemy(
         else if (down < up && down < left && down < right) move(0,1)
         else if (left < up && left < down && left < right) move(-1,0)
         else if (right < up && right < left && right < down) move(1,0)
-      }
-      //else randomMove()
-      if (Entity.intersect(this, player)) player.kill()
-      moveDelay = 0.0
-    }
-  }
-
-  //def postCheck(): Unit = ??? //What is this for?
-
-  def min(up: Int, down: Int, left: Int, right:Int){
-    //TODO
-    ???
+      } //else randomMove()
   }
   
   def move(dx: Double, dy: Double): Unit = { //1, 2, 3, 4: Up, Down, Left, Right
@@ -96,6 +95,7 @@ class Enemy(
         }
       }
     }
+		println("Shortest:"+solution)
     solution
   }
 }
