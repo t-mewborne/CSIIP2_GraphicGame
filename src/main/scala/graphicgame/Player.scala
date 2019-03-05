@@ -29,7 +29,8 @@ class Player(
   def stillHere(): Boolean = _stillHere
   
   def kill(): Unit = {
-    _stillHere = false
+    println("Dead :(")
+    //_stillHere = false
   }
   
   def facing(): Int = {

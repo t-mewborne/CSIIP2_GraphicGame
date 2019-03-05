@@ -45,8 +45,9 @@ class Enemy(
   //def postCheck(): Unit = ??? //TODO What is this for?
   
   def findPlayer(): Unit = {
-        if (((player.y-_y)/(player.x-_x)).abs <= 0.3) {
-        println(((player.y-_y)/(player.x-_x)).abs + "<= 0.3")
+        var distance = math.sqrt(((_x-player.x)*(_x-player.x))+((_y-player.y)*(_y-player.y)))
+        if (distance <= 100) {
+        println(distance + "<= 50")
         val up = shortestPath(_x, _y - 1, player.x, player.y)
         val down = shortestPath(_x, _y + 1, player.x, player.y)
         val left = shortestPath(_x - 1, _y, player.x, player.y)
