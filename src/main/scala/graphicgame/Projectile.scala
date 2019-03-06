@@ -3,9 +3,9 @@ package graphicgame
 class Projectile(
   private var _x:      Double,
   private var _y:      Double,
-  private var _width:  Int,
-  private var _height: Int,
-  maze:                Maze,
+  private var _width:  Double,
+  private var _height: Double,
+  level:               Level,
   private var newX:    Double,
   private var newY:    Double) extends Entity {
 
@@ -20,14 +20,11 @@ class Projectile(
   private var m = (_y - newY) / (_x - newX) //Slope of the projectile
   private var b = newY - m * newX //Y intercept of the projectile
 
-  private var dx = 1.0
-  private var dy = 1.0
-  if (math.abs(newX - _x) < 10) dx = dx / 2
-  if (math.abs(newX - _x) < 5) dx = dx / 3
-  if (math.abs(newX - _x) < 2.5) dx = dx / 4
-  if (math.abs(newX - _x) < 1.25) dx = 0
-  if (newX < _x) dx *= -1 //Make dx negative if the player clicked to the left of the center of the screen
-  if (newY < _y) dy *= -1
+  private var dx = newX - _x
+  private var dy = newY - _y
+  val mag = math.sqrt(dx*dx + dy*dy)
+  dx /= mag
+  dy /= mag
   
   def x: Double = _x
   def y: Double = _y
@@ -43,19 +40,23 @@ class Projectile(
       timeAlive += 0.1
       if (timeAlive > 10.0) _stillHere = false //Kill the projectile after it has been alive for too long
     }
+    for (i <- 0 until level.enemies.length){      
+    	if (Entity.intersect(this, level.enemies(i))) level.enemies(i).kill()
+    }
   }
 
   def move() {
-    val xTest = if (newX < _x) _x - 1 else _x + 1
+    val xTest = if (newX < _x) _x - dx else _x + dx
     val yTest = if (dx != 0) (m * xTest) + b else _y+dy
     //if (!maze.isClear(xTest, yTest, width, height, this)) m *= -1 //This is supposed to invert the slope but projectiles just go through walls
-    if (maze.isClear(xTest, yTest, width, height, this)) {
+    if (!level.maze.isClear(xTest, _y, width, height, this)) dx *= -1
+    else if (!level.maze.isClear(_x, yTest, width, height, this)) dy *= -1
+    //if (level.maze.isClear(xTest, yTest, width, height, this)) {
       if (dx == 0) _y += dy
       else{
         _x += dx
         _y = (m * _x) + b
       }
-    } 
-    else _stillHere = false //Kill the projectile if it hits a wall. Maybe change this to bounce (invert slope?)
+    //} else _stillHere = false //Kill the projectile if it hits a wall. TODO Maybe change this to bounce (invert slope?)
   }
 }

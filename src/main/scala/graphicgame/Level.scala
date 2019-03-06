@@ -17,11 +17,11 @@ class Level (
      * I believe _entities.length was only read once, and when an entity was removed from the level the list was no longer as long.
      * Therefore, the for loop was throwing an index out of bounds
      */
-    i = 0
-    while (i < _entities.length){
-      if (!_entities(i).stillHere()) _entities = _entities.filter(_ != _entities(i)) 
-      i+=1 
-    }
    _entities.foreach(_.update(delay))
+   _entities = _entities.filter(_.stillHere())
   } 
+  
+  def players = entities.collect{case p:Player=> p}
+  def enemies = entities.collect{case e:Enemy=> e}
+  def projectiles = entities.collect{case pr:Projectile=> pr}
 }

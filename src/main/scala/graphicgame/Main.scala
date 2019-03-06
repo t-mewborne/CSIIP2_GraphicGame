@@ -23,19 +23,18 @@ object Main extends JFXApp {
       // Put your code here.
       val canvas = new Canvas(boardWidth, boardHeight)
       val gc = canvas.graphicsContext2D
-      val renderer = new Renderer2D(gc,7)
+      val renderer = new Renderer2D(gc,14)
       
-      val maze = RandomMaze(20,false,mazeHeight,mazeWidth,0.7)
-      val player = new Player(10+util.Random.nextInt(mazeWidth)*20,10+util.Random.nextInt(mazeHeight)*20,5,5,maze)
-      val level = new Level(maze, Seq(player))
-      for (i <- 0 to 40) level += new Enemy(10+util.Random.nextInt(mazeWidth)*20,10+util.Random.nextInt(mazeHeight)*20,10,10,maze,player)
+      val maze = RandomMaze(10,false,mazeHeight,mazeWidth,0.7)
+      val level = new Level(maze, Seq())
+      val player = new Player(5+util.Random.nextInt(mazeWidth)*10,5+util.Random.nextInt(mazeHeight)*10,2.5,2.5,level)
+      level += player
+      for (i <- 0 to 20) level += new Enemy(5+util.Random.nextInt(mazeWidth)*10,5+util.Random.nextInt(mazeHeight)*10,5,5,level,player)
       content = canvas
       renderer.render(level, player.x,player.y)
 
       onMouseClicked = (e: MouseEvent) => {
-//        println("MOUSE X:"+renderer.pixelsToBlocksX(e.getX)+" MOUSE Y:" +renderer.pixelsToBlocksY(e.getYdddddddddd))
-//        println("PLAYER X:"+player.x+" PLAYER Y:" +player.y)
-        player.mouseClick(renderer.pixelsToBlocksX(e.getX).toInt.toDouble,renderer.pixelsToBlocksY(e.getY).toInt.toDouble,level)
+        player.mouseClick(renderer.pixelsToBlocksX(e.getX).toInt.toDouble,renderer.pixelsToBlocksY(e.getY).toInt.toDouble)
       }
       
       onKeyPressed = (ke: KeyEvent) => {

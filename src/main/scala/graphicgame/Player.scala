@@ -3,9 +3,9 @@ package graphicgame
 class Player(
   private var _x: Double,
   private var _y: Double,
-  private var _width: Int,
-  private var _height: Int,
-  maze: Maze) extends Entity {
+  private var _width: Double,
+  private var _height: Double,
+  level: Level) extends Entity {
 
   private var _stillHere = true
   private var movingUp = false
@@ -14,13 +14,10 @@ class Player(
   private var movingRight = false
   private var mouseX = 0.0
   private var mouseY = 0.0
+  private val speed = 20
   
   private var _facing = 0 //0-7 = Right, Right/Down, Down, Down/Left, Left, Left/Up, Up, Up/Right
-  
-  private val moveInterval = 0.006
-  private var moveDelay = 0.003
-
-
+ 
 
   def x(): Double = _x
   def y(): Double = _y
@@ -29,8 +26,10 @@ class Player(
   def stillHere(): Boolean = _stillHere
   
   def kill(): Unit = {
-    println("Dead :(")
+    //println("Dead :(")
     //_stillHere = false
+    _x = 5+util.Random.nextInt(Main.mazeWidth) * 10
+    _y = 5+util.Random.nextInt(Main.mazeHeight) * 10
   }
   
   def facing(): Int = {
@@ -46,22 +45,18 @@ class Player(
   }
 
   def update(delay: Double): Unit = {
-    moveDelay += delay
-    if (moveDelay >= moveInterval) {
-      if (movingUp) move(0,-1)
-      if (movingDown) move(0,1)
-      if (movingLeft) move(-1,0)
-      if (movingRight) move(1,0)
-      moveDelay = 0.0
-    }
+      if (movingUp) move(0,-speed*delay)
+      if (movingDown) move(0,speed*delay)
+      if (movingLeft) move(-speed*delay,0)
+      if (movingRight) move(speed*delay,0)
   }
 
  // def postCheck(): Unit = ???
   
-  def mouseClick(mouseXPos:Double,mouseYPos:Double,level:Level): Unit = {
+  def mouseClick(mouseXPos:Double,mouseYPos:Double): Unit = {
     mouseX = mouseXPos
     mouseY = mouseYPos
-    level += new Projectile(_x,_y,2,2,maze,mouseXPos,mouseYPos)
+    level += new Projectile(_x,_y,1,1,level,mouseXPos,mouseYPos)
   }
 
   def upPressed(): Unit = movingUp = true
@@ -75,7 +70,7 @@ class Player(
   def rightReleased(): Unit = movingRight = false
   
   def move(dx:Double,dy:Double):Unit={
-    if (maze.isClear(x+dx,y+dy,width,height,this)){
+    if (level.maze.isClear(x+dx,y+dy,width,height,this)){
       _x+=dx
       _y+=dy
     }
