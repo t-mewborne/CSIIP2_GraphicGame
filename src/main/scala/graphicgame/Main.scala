@@ -61,7 +61,6 @@ object Main extends JFXApp {
           val delay = (time - lastTime) / 1e9
           level.updateAll(delay)
           renderer.render(level, player.x,player.y)
-          //if (Entity.intersect(player, enemy)) println("Player/Enemy Intersection-- you died") //TODO Delete this later
         }
         lastTime = time
       })

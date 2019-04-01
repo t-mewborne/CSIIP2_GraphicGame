@@ -1,11 +1,18 @@
 package graphicgame
 
+import java.net.Socket
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
+
 class Player(
   private var _x: Double,
   private var _y: Double,
   private var _width: Double,
   private var _height: Double,
-  level: Level) extends Entity {
+  val level: Level,
+  val sock: Socket,
+  val in: ObjectInputStream,
+  val out: ObjectOutputStream) extends Entity {
 
   private var _stillHere = true
   private var movingUp = false
@@ -68,6 +75,20 @@ class Player(
   def downReleased(): Unit = movingDown = false
   def leftReleased(): Unit = movingLeft = false
   def rightReleased(): Unit = movingRight = false
+  
+  def handleKey(obj: AnyRef): Unit = {
+
+    obj match {
+      case UpPressed => upPressed()
+      case DownPressed => downPressed()
+      case LeftPressed => leftPressed()
+      case RightPressed => rightPressed()
+      case UpReleased => upReleased()
+      case DownReleased => downReleased()
+      case LeftReleased => leftReleased()
+      case RightReleased => rightReleased()
+    }
+  }
   
   def move(dx:Double,dy:Double):Unit={
     if (level.maze.isClear(x+dx,y+dy,width,height,this)){

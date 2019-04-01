@@ -69,6 +69,10 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
       }
       gc.drawImage(img, blocksToPixelsX(x), blocksToPixelsY(y), blockSize, blockSize)
     }
+    
+    def renderNetworked(): Unit = {
+      ???
+    }
 
      //Draw entities
     for (e <- level.entities) {
