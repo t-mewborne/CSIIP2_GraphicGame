@@ -18,11 +18,13 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private val floorImage = Renderer2D.loadImage("/images/floor.png")
   private val wallImage = Renderer2D.loadImage("/images/wall.png")
 
-  private val enemyImageRed = Renderer2D.loadImage("/images/red.png")
-  private val enemyImageOrange = Renderer2D.loadImage("/images/orange.png")
-  private val enemyImageBlue = Renderer2D.loadImage("/images/blue.png")
-  private val enemyImagePink = Renderer2D.loadImage("/images/pink.png")
-//  private val generatorImage = Renderer2D.loadImage("/images/generator.png")
+  private val enemyImages = Array (
+  Renderer2D.loadImage("/images/red.png"),
+  Renderer2D.loadImage("/images/orange.png"),
+  Renderer2D.loadImage("/images/blue.png"),
+  Renderer2D.loadImage("/images/pink.png")
+  )
+  
   private val bulletImage = Renderer2D.loadImage("/images/projectile.png")
   
   private val playerImages = Array(
@@ -51,7 +53,7 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   /**
    * This method is called to render things to the screen.
    */
-  def render(level: Level, cx: Double, cy: Double): Unit = {
+  def render(level: PassableLevel, cx: Double, cy: Double): Unit = {
     lastCenterX = cx
     lastCenterY = cy
     
@@ -69,23 +71,13 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
       }
       gc.drawImage(img, blocksToPixelsX(x), blocksToPixelsY(y), blockSize, blockSize)
     }
-    
-    def renderNetworked(): Unit = {
-      ???
-    }
 
      //Draw entities
     for (e <- level.entities) {
-      val img = e match {
-        case p: Player => playerImages(p.facing)
-        case e: Enemy => e.enemyType match {
-        case 1 => enemyImageRed
-        case 2 => enemyImageOrange
-        case 3 => enemyImageBlue
-        case 4 => enemyImagePink
-        }
-        case b: Projectile => bulletImage
-        //case g: Generator => generatorImage
+      val img = e.style match {
+        case (1,x) => playerImages(x)
+        case (2,x) => enemyImages(x)
+        case (3,0) => bulletImage
       }
       if(level.maze.wrap) {
         for(rx <- -1 to 1; ry <- -1 to 1)

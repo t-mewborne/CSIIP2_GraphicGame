@@ -1,17 +1,20 @@
+//ENTITY STYLE (2,x)
+
 package graphicgame
 
 import collection.mutable
 
 class Enemy(
-  private var _x:      Double,
-  private var _y:      Double,
-  private var _width:  Int,
+  private var _x: Double,
+  private var _y: Double,
+  private var _width: Int,
   private var _height: Int,
-  val level:           Level,
-  player:              Player) extends Entity {
+  val level: Level) extends Entity {
+
+  val style = (2, util.Random.nextInt(4)) //0, 1, 2, 3 Red, Orange, Blue, Pink TODO Change enemy image if player captured/enemy killed, takes 2 shots to kill enemy?
 
   private var dead = false
-  private val speed = 18
+  private val speed = 10
   private var movingUp = false
   private var movingDown = false
   private var movingLeft = false
@@ -21,7 +24,6 @@ class Enemy(
   //  private var _shortestDown = 0
   //  private var _shortestLeft = 0
   //  private var _shortestRight = 0
-  private val _enemyType = util.Random.nextInt(4) + 1 //1, 2, 3, 4 Red, Orange, Blue, Pink TODO Change enemy image if player captured/enemy killed, takes 2 shots to kill enemy?
 
   //TODO change x,y coordinates if player/another enemy is already in the given spawning location
 
@@ -30,26 +32,30 @@ class Enemy(
   def width(): Double = _width
   def height(): Double = _height
   def stillHere(): Boolean = _stillHere
-  def enemyType(): Int = _enemyType
+  def makePassable(): PassableEntity = new PassableEntity(x, y, width, height, style)
 
   def update(delay: Double): Unit = {
-    var distance = math.sqrt(((_x - player.x) * (_x - player.x)) + ((_y - player.y) * (_y - player.y)))
-    if (distance <= 40) findPlayer(speed*delay)
-    else randomMove()
-    if (Entity.intersect(this, player)) player.kill()
+    if (level.players.length > 0) {
+      var distances = level.players.map(player => math.sqrt(((_x - player.x) * (_x - player.x)) + ((_y - player.y) * (_y - player.y))))
+      var distance = distances.min
+      var playerTrack = level.players(distances.indexOf(distance))
+      if (distance <= 40) findPlayer(speed * delay, playerTrack)
+      else randomMove(delay)
+      if (Entity.intersect(this, playerTrack)) playerTrack.kill()
+    }
   }
 
   //def postCheck(): Unit = ??? //TODO What is this for?
 
-  def findPlayer(moveInterval : Double): Unit = {
-      val up = shortestPath(_x, _y - 1, player.x, player.y)
-      val down = shortestPath(_x, _y + 1, player.x, player.y)
-      val left = shortestPath(_x - 1, _y, player.x, player.y)
-      val right = shortestPath(_x + 1, _y, player.x, player.y)
-      if (up <= down && up <= left && up <= right) move(0, -1)
-      else if (down <= up && down <= left && down <= right) move(0, moveInterval)
-      else if (left <= up && left <= down && left <= right) move(-moveInterval, 0)
-      else if (right <= up && right <= left && right <= down) move(moveInterval, 0)
+  def findPlayer(moveInterval: Double, player: Player): Unit = {
+    val up = shortestPath(_x, _y - 1, player.x, player.y)
+    val down = shortestPath(_x, _y + 1, player.x, player.y)
+    val left = shortestPath(_x - 1, _y, player.x, player.y)
+    val right = shortestPath(_x + 1, _y, player.x, player.y)
+    if (up <= down && up <= left && up <= right) move(0, -moveInterval)
+    else if (down <= up && down <= left && down <= right) move(0, moveInterval)
+    else if (left <= up && left <= down && left <= right) move(-moveInterval, 0)
+    else if (right <= up && right <= left && right <= down) move(moveInterval, 0)
   }
 
   def move(dx: Double, dy: Double): Unit = { //1, 2, 3, 4: Up, Down, Left, Right
@@ -58,22 +64,19 @@ class Enemy(
       _y += dy
     }
   }
-  
-  def kill(){
+
+  def kill() {
     _stillHere = false
   }
 
-  def randomMove() {
+  def randomMove(delay: Double) {
     //TODO
     var dx = util.Random.nextInt(3) - 1
     var dy = util.Random.nextInt(3) - 1
     if (dx != 0) dy = 0
-    for (i <- 0 to util.Random.nextInt(5) + 5) move(dx, dy)
+    for (i <- 0 to util.Random.nextInt(5) + 5) move(dx * delay, dy * delay)
   }
 
-  //println("Is there a wall here: " + (if (maze.apply(_x.toInt,_y.toInt) == Floor) "no" else "yes"))
-
-  //println(shortestPath(_x.toInt, _y.toInt, player.x.toInt, player.y.toInt))
   def shortestPath(sx: Double, sy: Double, ex: Double, ey: Double): Int = {
     if (level.maze.isClear(sx, sy, width, height, this)) {
       val offsets = List((0, -1), (0, 1), (-1, 0), (1, 0))

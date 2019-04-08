@@ -10,4 +10,4 @@ case object DownReleased
 case object LeftReleased 
 case object RightReleased 
 
-case class MouseClick(x:Double,y:Double)
+case class MouseClicked(x:Double,y:Double)

@@ -1,3 +1,5 @@
+//ENTITY STYLE (1,1-8)
+
 package graphicgame
 
 import java.net.Socket
@@ -14,6 +16,7 @@ class Player(
   val in: ObjectInputStream,
   val out: ObjectOutputStream) extends Entity {
 
+  
   private var _stillHere = true
   private var movingUp = false
   private var movingDown = false
@@ -24,6 +27,7 @@ class Player(
   private val speed = 20
   
   private var _facing = 0 //0-7 = Right, Right/Down, Down, Down/Left, Left, Left/Up, Up, Up/Right
+  var style = (1, _facing)
  
 
   def x(): Double = _x
@@ -31,12 +35,13 @@ class Player(
   def width(): Double = _width
   def height(): Double = _height
   def stillHere(): Boolean = _stillHere
+  def makePassable(): PassableEntity = new PassableEntity(x, y, width, height, style)
   
   def kill(): Unit = {
     //println("Dead :(")
     //_stillHere = false
-    _x = 5+util.Random.nextInt(Main.mazeWidth) * 10
-    _y = 5+util.Random.nextInt(Main.mazeHeight) * 10
+    _x = 5+util.Random.nextInt(Server.mazeWidth) * 10
+    _y = 5+util.Random.nextInt(Server.mazeHeight) * 10
   }
   
   def facing(): Int = {
@@ -87,6 +92,7 @@ class Player(
       case DownReleased => downReleased()
       case LeftReleased => leftReleased()
       case RightReleased => rightReleased()
+      case MouseClicked(x,y) => mouseClick(x,y)
     }
   }
   

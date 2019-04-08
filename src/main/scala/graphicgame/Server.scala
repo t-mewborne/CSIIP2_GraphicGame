@@ -14,13 +14,18 @@ object Server extends App {
   val mazeWidth = 30
   val mazeHeight = 30
 
-  private val ss = new ServerSocket(4040)
+  val portNumber = 8080
+  private val ss = new ServerSocket(portNumber)
+  println("Server open on port " + portNumber)
   val maze = RandomMaze(10, false, mazeHeight, mazeWidth, 0.7)
   val level = new Level(maze, Seq())
+  
+  for (i <- 0 to 20) level += new Enemy(5+util.Random.nextInt(mazeWidth)*10,5+util.Random.nextInt(mazeHeight)*10,5,5,level)
   
   Future {
     while (true) {
       val sock = ss.accept()
+      println("A player joined the game.")
       val in = new ObjectInputStream(sock.getInputStream)
       val out = new ObjectOutputStream(sock.getOutputStream)
       val player = new Player(5 + util.Random.nextInt(mazeWidth) * 10, 5 + util.Random.nextInt(mazeHeight) * 10, 2.5, 2.5, level, sock, in, out)
@@ -30,6 +35,8 @@ object Server extends App {
   }
 
   var lastTime = -1L
+  val frameInterval = 0.03
+  var frameDelay = 0.0
   while (true) {
     while (playerQueue.size() > 0) {
       val player = playerQueue.take()
@@ -43,11 +50,20 @@ object Server extends App {
     val time = System.nanoTime()
     if (lastTime != -1) {
       val delay = (time - lastTime) / 1e9
-      for (player <- players) {
-        if (player.board.update(delay)) {
-          val pb = player.board.makePassable()
-          player.out.writeObject(pb)
+    	frameDelay += delay
+    	level.updateAll(delay)
+    	if (frameDelay >= frameInterval) {
+        for (player <- players) {
+          val pb = player.level.makePassable(player.x,player.y)
+          try {
+            player.out.writeObject(pb)
+          } catch {
+            case e: Throwable=>
+            println("A player left the game.")
+            players = players.filterNot(p => p.equals(player))
+          }
         }
+        frameDelay=0
       }
     }
     lastTime = time
