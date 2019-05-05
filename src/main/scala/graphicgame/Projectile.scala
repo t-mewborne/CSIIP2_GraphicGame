@@ -9,7 +9,8 @@ class Projectile(
   private var _height: Double,
   level:               Level,
   private var newX:    Double,
-  private var newY:    Double) extends Entity {
+  private var newY:    Double,
+  val person: Player) extends Entity {
 
   val style = (3,0)
   
@@ -35,6 +36,7 @@ class Projectile(
   def height: Double = _height
   def stillHere: Boolean = _stillHere
   def makePassable(): PassableEntity = new PassableEntity(_x, _y, width, height, style)
+  def score: Int = 0
 
   def update(delay: Double): Unit = {
     moveDelay += delay
@@ -47,6 +49,7 @@ class Projectile(
     for (i <- 0 until level.enemies.length){      
     	if (Entity.intersect(this, level.enemies(i))) {
     	  level.enemies(i).kill()
+    	  person.increaseScore
     	  _stillHere = false
     	}
     }

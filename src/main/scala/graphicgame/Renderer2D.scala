@@ -87,6 +87,9 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
     	  gc.drawImage(img, blocksToPixelsX(e.x-e.width/2), blocksToPixelsY(e.y-e.height/2), e.width*blockSize, e.height*blockSize)
       }
     }
+    
+    gc.fillText(level.score.toString,0,0)
+    
   }
 }
 

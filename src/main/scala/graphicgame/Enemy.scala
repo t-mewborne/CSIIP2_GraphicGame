@@ -30,6 +30,7 @@ class Enemy(
   def height(): Double = _height
   def stillHere(): Boolean = _stillHere
   def makePassable(): PassableEntity = new PassableEntity(x, y, width, height, style)
+  def score():Int = 0
 
   def update(delay: Double): Unit = {
     if (level.players.length > 0) {

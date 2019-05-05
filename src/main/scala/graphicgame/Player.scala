@@ -11,6 +11,7 @@ class Player(
   private var _y: Double,
   private var _width: Double,
   private var _height: Double,
+  private var _score: Int,
   val level: Level,
   val sock: Socket,
   val in: ObjectInputStream,
@@ -36,6 +37,7 @@ class Player(
   def height(): Double = _height
   def stillHere(): Boolean = _stillHere
   def makePassable(): PassableEntity = new PassableEntity(x, y, width, height, style)
+  def score():Int = _score
   
   def kill(): Unit = {
     //println("Dead :(")
@@ -68,8 +70,10 @@ class Player(
   def mouseClick(mouseXPos:Double,mouseYPos:Double): Unit = {
     mouseX = mouseXPos
     mouseY = mouseYPos
-    level += new Projectile(_x,_y,1,1,level,mouseXPos,mouseYPos)
+    level += new Projectile(_x,_y,1,1,level,mouseXPos,mouseYPos,this)
   }
+  
+  def increaseScore: Unit = _score += 1
 
   def upPressed(): Unit = movingUp = true
   def downPressed(): Unit = movingDown = true

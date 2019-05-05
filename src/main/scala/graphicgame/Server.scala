@@ -28,7 +28,7 @@ object Server extends App {
       println("A player joined the game. ")
       val in = new ObjectInputStream(sock.getInputStream)
       val out = new ObjectOutputStream(sock.getOutputStream)
-      val player = new Player(5 + util.Random.nextInt(mazeWidth) * 10, 5 + util.Random.nextInt(mazeHeight) * 10, 2.5, 2.5, level, sock, in, out)
+      val player = new Player(5 + util.Random.nextInt(mazeWidth) * 10, 5 + util.Random.nextInt(mazeHeight) * 10, 2.5, 2.5, 0, level, sock, in, out)
       playerQueue.put(player)
       level += player
     }
@@ -54,7 +54,7 @@ object Server extends App {
     	level.updateAll(delay)
     	if (frameDelay >= frameInterval) {
         for (player <- players) {
-          val pb = player.level.makePassable(player.x,player.y)
+          val pb = player.level.makePassable(player.x,player.y,player.score)
           try {
             player.out.writeObject(pb)
           } catch {

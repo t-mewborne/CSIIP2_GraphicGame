@@ -27,5 +27,5 @@ class Level(
   def players = entities.collect { case p: Player => p }
   def enemies = entities.collect { case e: Enemy => e }
   def projectiles = entities.collect { case pr: Projectile => pr }
-  def makePassable(x:Double,y:Double) = new PassableLevel(entities.map(_.makePassable), maze, x, y)
+  def makePassable(x:Double,y:Double,score:Int) = new PassableLevel(entities.map(_.makePassable), maze, x, y, score)
 }
