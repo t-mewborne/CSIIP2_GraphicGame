@@ -45,7 +45,10 @@ class Projectile(
       if (timeAlive > 10.0) _stillHere = false //Kill the projectile after it has been alive for too long
     }
     for (i <- 0 until level.enemies.length){      
-    	if (Entity.intersect(this, level.enemies(i))) level.enemies(i).kill()
+    	if (Entity.intersect(this, level.enemies(i))) {
+    	  level.enemies(i).kill()
+    	  _stillHere = false
+    	}
     }
   }
 
@@ -54,8 +57,9 @@ class Projectile(
     val yTest = if (dx != 0) (m * xTest) + b else _y+dy
     //if (!maze.isClear(xTest, yTest, width, height, this)) m *= -1 //This is supposed to invert the slope but projectiles just go through walls
     if (!level.maze.isClear(xTest, _y, width, height, this) || !level.maze.isClear(_x, yTest, width, height, this)) {
-      dx *= -1
-      dy *= -1
+      //dx *= -1
+      //dy *= -1
+      _stillHere = false
     }
     //else if (!level.maze.isClear(_x, yTest, width, height, this)) dy *= -0.75
     //if (level.maze.isClear(xTest, yTest, width, height, this)) {
@@ -64,6 +68,6 @@ class Projectile(
         _x += dx
         _y = (m * _x) + b
       }
-    //} else _stillHere = false //Kill the projectile if it hits a wall. TODO Maybe change this to bounce (invert slope?)
+    //} else _stillHere = false //Kill the projectile if it hits a wall.TODO Maybe change this to bounce (invert slope?)
   }
 }

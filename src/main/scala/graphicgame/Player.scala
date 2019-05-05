@@ -27,7 +27,7 @@ class Player(
   private val speed = 20
   
   private var _facing = 0 //0-7 = Right, Right/Down, Down, Down/Left, Left, Left/Up, Up, Up/Right
-  var style = (1, _facing)
+  var style = (1, facing)
  
 
   def x(): Double = _x

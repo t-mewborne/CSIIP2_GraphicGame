@@ -16,7 +16,7 @@ object Server extends App {
 
   val portNumber = 8080
   private val ss = new ServerSocket(portNumber)
-  println("Server open on port " + portNumber)
+  println("Server hosted on port " + portNumber)
   val maze = RandomMaze(10, false, mazeHeight, mazeWidth, 0.7)
   val level = new Level(maze, Seq())
   
@@ -25,7 +25,7 @@ object Server extends App {
   Future {
     while (true) {
       val sock = ss.accept()
-      println("A player joined the game.")
+      println("A player joined the game. ")
       val in = new ObjectInputStream(sock.getInputStream)
       val out = new ObjectOutputStream(sock.getOutputStream)
       val player = new Player(5 + util.Random.nextInt(mazeWidth) * 10, 5 + util.Random.nextInt(mazeHeight) * 10, 2.5, 2.5, level, sock, in, out)

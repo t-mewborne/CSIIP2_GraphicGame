@@ -22,7 +22,8 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   Renderer2D.loadImage("/images/red.png"),
   Renderer2D.loadImage("/images/orange.png"),
   Renderer2D.loadImage("/images/blue.png"),
-  Renderer2D.loadImage("/images/pink.png")
+  Renderer2D.loadImage("/images/pink.png"),
+  Renderer2D.loadImage("/images/boss.png")
   )
   
   private val bulletImage = Renderer2D.loadImage("/images/projectile.png")

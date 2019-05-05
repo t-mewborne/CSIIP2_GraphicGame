@@ -1,4 +1,4 @@
-//ENTITY STYLE (2,x)
+//ENTITY STYLE (2,x(0-3))
 
 package graphicgame
 
@@ -11,8 +11,8 @@ class Enemy(
   private var _height: Int,
   val level: Level) extends Entity {
 
-  val style = (2, util.Random.nextInt(4)) //0, 1, 2, 3 Red, Orange, Blue, Pink TODO Change enemy image if player captured/enemy killed, takes 2 shots to kill enemy?
-
+  val boss = util.Random.nextInt(10) > 8
+  val style = if (boss)(2, 4) else (2, util.Random.nextInt(4)) //0, 1, 2, 3, 4 Red, Orange, Blue, Pink, Boss TODO Change enemy type if player captured/enemy killed
   private var dead = false
   private val speed = 10
   private var movingUp = false
@@ -20,10 +20,7 @@ class Enemy(
   private var movingLeft = false
   private var movingRight = true
   private var _stillHere = true
-  //  private var _shortestUp = 0
-  //  private var _shortestDown = 0
-  //  private var _shortestLeft = 0
-  //  private var _shortestRight = 0
+  private var health = 10
 
   //TODO change x,y coordinates if player/another enemy is already in the given spawning location
 
@@ -59,14 +56,20 @@ class Enemy(
   }
 
   def move(dx: Double, dy: Double): Unit = { //1, 2, 3, 4: Up, Down, Left, Right
-    if (level.maze.isClear(x + dx, y + dy, width, height, this)) {
+    if (boss && level.maze.isClear(x + dx*2, y + dy*2, width, height, this)) {
+      _x += dx*2
+      _y += dy*2
+    }
+    
+    if (!boss && level.maze.isClear(x + dx, y + dy, width, height, this)) {
       _x += dx
       _y += dy
     }
   }
 
   def kill() {
-    _stillHere = false
+    if (boss) health -= 1 else health = 0
+    _stillHere = !(health<=0)
   }
 
   def randomMove(delay: Double) {
