@@ -88,7 +88,10 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
       }
     }
     
-    gc.fillText(level.score.toString,0,0)
+    //gc.setColor(Color.WHITE)
+    //gc.setFont(f)
+    gc.fill_=(Color.WHITE)
+    gc.fillText(level.score.toString,30,30)
     
   }
 }

@@ -42,6 +42,7 @@ class Player(
   def kill(): Unit = {
     //println("Dead :(")
     //_stillHere = false
+    for(i<-0 until 5) decreaseScore
     _x = 5+util.Random.nextInt(Server.mazeWidth) * 10
     _y = 5+util.Random.nextInt(Server.mazeHeight) * 10
   }
@@ -74,6 +75,7 @@ class Player(
   }
   
   def increaseScore: Unit = _score += 1
+  def decreaseScore: Unit = if (!(_score-1 < 0)) _score-=1
 
   def upPressed(): Unit = movingUp = true
   def downPressed(): Unit = movingDown = true
